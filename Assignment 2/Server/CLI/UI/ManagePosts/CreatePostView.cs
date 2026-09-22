@@ -1,19 +1,15 @@
-using Entities;
 using RepositoryContracts;
+using Entities;
 
 namespace CLI.UI.ManagePosts;
 
 public class CreatePostView
 {
     private readonly IPostRepository postRepository;
-    private readonly IUserRepository userRepository;
 
-    public CreatePostView(
-        IPostRepository postRepository,
-        IUserRepository userRepository)
+    public CreatePostView(IPostRepository postRepository)
     {
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     public async Task StartAsync()
@@ -21,7 +17,7 @@ public class CreatePostView
         Console.WriteLine();
         Console.WriteLine("=== Create New Post ===");
 
-        Console.Write("Enter post title: ");
+        Console.Write("Enter title: ");
         string title = Console.ReadLine() ?? "";
 
         if (string.IsNullOrWhiteSpace(title))
@@ -30,7 +26,7 @@ public class CreatePostView
             return;
         }
 
-        Console.Write("Enter post body: ");
+        Console.Write("Enter body: ");
         string body = Console.ReadLine() ?? "";
 
         if (string.IsNullOrWhiteSpace(body))
@@ -48,11 +44,12 @@ public class CreatePostView
             return;
         }
 
-        User? user = await userRepository.GetSingleAsync(userId);
+        Console.Write("Enter subforum ID: ");
+        string subForumIdInput = Console.ReadLine() ?? "";
 
-        if (user == null)
+        if (!int.TryParse(subForumIdInput, out int subForumId))
         {
-            Console.WriteLine("User does not exist.");
+            Console.WriteLine("Invalid subforum ID.");
             return;
         }
 
@@ -60,7 +57,8 @@ public class CreatePostView
         {
             Title = title,
             Body = body,
-            UserId = userId
+            UserId = userId,
+            SubForumId = subForumId
         };
 
         Post createdPost = await postRepository.AddAsync(post);

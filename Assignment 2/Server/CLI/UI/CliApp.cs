@@ -31,9 +31,10 @@ public class CliApp
             Console.WriteLine();
             Console.WriteLine("=== Main Menu ===");
             Console.WriteLine("1. Create new user");
-            Console.WriteLine("2. View posts overview");
-            Console.WriteLine("3. View specific post");
-            Console.WriteLine("4. Add comment to post");
+            Console.WriteLine("2. Create new post");
+            Console.WriteLine("3. View posts overview");
+            Console.WriteLine("4. View specific post");
+            Console.WriteLine("5. Add comment to post");
             Console.WriteLine("0. Exit");
             Console.Write("Choose an option: ");
 
@@ -49,13 +50,20 @@ public class CliApp
                     break;
 
                 case "2":
+                    CreatePostView createPostView =
+                        new CreatePostView(postRepository);
+
+                    await createPostView.StartAsync();
+                    break;
+
+                case "3":
                     ListPostsView listPostsView =
                         new ListPostsView(postRepository);
 
                     await listPostsView.StartAsync();
                     break;
-                
-                case "3":
+
+                case "4":
                     SinglePostView singlePostView =
                         new SinglePostView(
                             postRepository,
@@ -63,8 +71,8 @@ public class CliApp
 
                     await singlePostView.StartAsync();
                     break;
-                
-                case "4":
+
+                case "5":
                     AddCommentView addCommentView =
                         new AddCommentView(
                             commentRepository,
